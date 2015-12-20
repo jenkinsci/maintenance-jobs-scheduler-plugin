@@ -1,0 +1,19 @@
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+    <f:section title="${%Disable Jobs Scheduler}">
+        <f:entry title="${%Enable consumer}" field="enableDisabler">
+            <f:checkbox />
+        </f:entry>
+        <f:entry title="${%Schedule}" field="spec">
+            <f:textbox />
+        </f:entry>
+        <f:entry title="${%Remove Jobs}" field="enableRemover">
+            <f:checkbox />
+        </f:entry>
+        <f:entry title="${%Send Email}" field="enableEmail">
+            <f:checkbox />
+        </f:entry>
+        <f:entry title="${%DryRun}" field="enableDryRun">
+            <f:checkbox />
+        </f:entry>
+    </f:section>
+</j:jelly>

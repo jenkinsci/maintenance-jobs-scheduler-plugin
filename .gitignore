@@ -1,0 +1,10 @@
+.classpath
+.project
+.settings/
+target/
+work*/
+jenkins.war
+.idea/
+*.iml
+*.ipr
+*.iws
