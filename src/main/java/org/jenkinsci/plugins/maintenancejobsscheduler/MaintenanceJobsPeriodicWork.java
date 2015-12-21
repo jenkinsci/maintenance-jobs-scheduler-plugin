@@ -22,13 +22,13 @@ import java.util.logging.Level;
  * @author Victor Martinez
  */
 @Extension
-public class DisableJobsPeriodicWork extends AsyncAperiodicWork {
+public class MaintenanceJobsPeriodicWork extends AsyncAperiodicWork {
 
     //last scheduled task;
-    private static DisableJobsPeriodicWork currentTask;
+    private static MaintenanceJobsPeriodicWork currentTask;
 
-    public DisableJobsPeriodicWork() {
-        super("DisableJobsPeriodicWork Worker Thread");
+    public MaintenanceJobsPeriodicWork() {
+        super("MaintenanceJobsPeriodicWork Worker Thread");
     }
 
     @Override
@@ -70,7 +70,7 @@ public class DisableJobsPeriodicWork extends AsyncAperiodicWork {
         else{
             cancel();
         }
-        currentTask = new DisableJobsPeriodicWork();
+        currentTask = new MaintenanceJobsPeriodicWork();
         return currentTask;
     }
 
@@ -78,7 +78,7 @@ public class DisableJobsPeriodicWork extends AsyncAperiodicWork {
         return name +" thread";
     }
 
-    public DisableJobsPeriodicWork getLastTask(){
+    public MaintenanceJobsPeriodicWork getLastTask(){
         return currentTask;
     }
 
