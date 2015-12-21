@@ -6,14 +6,19 @@
         <f:entry title="${%Schedule}" field="spec">
             <f:textbox />
         </f:entry>
-        <f:entry title="${%Remove Jobs}" field="enableRemover">
-            <f:checkbox />
+        <f:entry title="${%Older than}" field="filter">
+            <f:textbox />
         </f:entry>
-        <f:entry title="${%Send Email}" field="enableEmail">
-            <f:checkbox />
-        </f:entry>
-        <f:entry title="${%DryRun}" field="enableDryRun">
-            <f:checkbox />
-        </f:entry>
+        <f:advanced>
+            <f:entry title="${%Set job description}" field="description">
+                <f:textbox />
+            </f:entry>
+            <f:entry title="${%Excluding jobs}" field="excludedJobs">
+                <f:textarea />
+            </f:entry>
+            <f:entry title="${%Remove Jobs}" field="enableRemover">
+                <f:checkbox />
+            </f:entry>
+        </f:advanced>
     </f:section>
 </j:jelly>

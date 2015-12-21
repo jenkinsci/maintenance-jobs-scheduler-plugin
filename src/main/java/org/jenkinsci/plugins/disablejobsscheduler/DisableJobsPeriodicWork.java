@@ -12,6 +12,7 @@ import jenkins.util.Timer;
 
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.logging.Level;
@@ -22,8 +23,6 @@ public class DisableJobsPeriodicWork extends AsyncAperiodicWork {
     //last scheduled task;
     private static DisableJobsPeriodicWork currentTask;
 
-    private boolean cancelled;
-
     public DisableJobsPeriodicWork() {
         super("DisableJobsPeriodicWork Worker Thread");
     }
@@ -32,38 +31,30 @@ public class DisableJobsPeriodicWork extends AsyncAperiodicWork {
     protected void execute(TaskListener taskListener) throws IOException, InterruptedException {
         GlobalPluginConfiguration conf = GlobalPluginConfiguration.get();
         if (conf.isEnableDisabler()) {
-            logger.log(Level.INFO, "Running that job");
-            try{
-                for (Object item : Jenkins.getInstance().getItems()) {
-                    if (item instanceof AbstractProject) {
-                        AbstractProject project = (AbstractProject) item;
-                        //do not count building project
-                        if (project.isBuilding())
-                            continue;
-                        try {
-                            if (project.getLastBuild() != null) {
-                                logger.log(Level.INFO, "Disabling that job " + project.getName());
-
-                                //project.getLastBuild().getTimeInMillis() > 30 dias
-                                project.disable();
-                            } else {
-                                // That project doesn't have any build yet, let's avoid disabling those jobs
-                                logger.log(Level.INFO, "Excluded that job " + project.getName());
-
-                                continue;
-                            }
-                        } catch (Exception ex) {
-                            logger.log(Level.WARNING, "Error when recording disk usage for " + project.getName(), ex);
-                        }
+            Date today = new Date();
+            for (Object item : Jenkins.getInstance().getItems()) {
+                if (item instanceof AbstractProject) {
+                    AbstractProject project = (AbstractProject) item;
+                    long purgeTime = System.currentTimeMillis() - (Integer.parseInt(conf.getFilter()) * 24 * 60 * 60 * 1000);
+                    if (project.getLastBuild() == null) {
+                        logger.log(Level.FINER, "Excluded that job '" + project.getName() + "' since it doesn't have any builds yet");
+                    } else if (project.isDisabled()) {
+                        logger.log(Level.FINER, "Excluded that job '" + project.getName() + "' since it doesn't have any builds yet");
+                    } else if (project.getLastBuild().getTimeInMillis() < purgeTime) {
+                        logger.log(Level.FINER, "Disabling job '" + project.getName() + "'");
+                        project.disable();
+                        String description = conf.getDescription() + " '" + today.toString() + "'\n";
+                        //TODO: add dependency with https://wiki.jenkins-ci.org/display/JENKINS/OWASP+Markup+Formatter+Plugin
+                        // in order to add description in html format
+                        // if (Jenkins.getInstance().getMarkupFormatter() instanceof hudson.markup.RawHtmlMarkupFormatter)
+                        project.setDescription(description + project.getDescription());
+                    } else {
+                        logger.log(Level.FINER, "Excluded that job '" + project.getName() + "' for some other reason");
                     }
                 }
             }
-            catch(Exception e) {
-                logger.log(Level.WARNING, "Error when recording disk usage for jobs.", e);
-            }
-        }
-        else {
-            logger.log(Level.FINER, "Calculation of jobs is disabled.");
+        } else {
+            logger.log(Level.FINER, this.name + " is disabled.");
         }
     }
 
@@ -94,14 +85,9 @@ public class DisableJobsPeriodicWork extends AsyncAperiodicWork {
 
     @Override
     public boolean cancel(){
-        cancelled = true;
         ScheduledThreadPoolExecutor ex = (ScheduledThreadPoolExecutor) Timer.get();
         ex.purge();
         return super.cancel();
-    }
-
-    public boolean isCancelled(){
-        return cancelled;
     }
 
     public CronTab getCronTab() throws ANTLRException {
@@ -120,7 +106,7 @@ public class DisableJobsPeriodicWork extends AsyncAperiodicWork {
             long period = nextExecution.getTimeInMillis() - now.getTimeInMillis();
             if(nextExecution.getTimeInMillis() - now.getTimeInMillis()<=60000)
                 period = period + 60000l; //add one minute to not schedule it during one minute one than once
-            logger.log(Level.INFO, "Waiting ... " + period);
+            logger.log(Level.FINER, "Waiting ... " + period + " ms");
             return period;
         } catch (Exception ex) {
             logger.log(Level.SEVERE, null, ex);
@@ -128,7 +114,4 @@ public class DisableJobsPeriodicWork extends AsyncAperiodicWork {
             return 1000*60*6;
         }
     }
-
-
-
 }
