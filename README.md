@@ -1,23 +1,19 @@
-Disable Jobs Scheduler Plugin
-=============================
+# Maintenance Jobs Scheduler Plugin
 
 TBD
 
-Motivation
-==========
+## Motivation
 
 TBD
 
-Development
-===========
+## Development
 
 Start the local Jenkins instance:
 
     mvn hpi:run
 
 
-How to install
---------------
+### How to install
 
 Run
 
@@ -28,25 +24,22 @@ to create the plugin .hpi file.
 
 To install:
 
-1. copy the resulting ./target/disable-jobs-scheduler.hpi file to the $JENKINS_HOME/plugins directory. Don't forget to restart Jenkins afterwards.
+1. copy the resulting ./target/maintenance-jobs-scheduler.hpi file to the $JENKINS_HOME/plugins directory. Don't forget to restart Jenkins afterwards.
 
 2. or use the plugin management console (http://example.com:8080/pluginManager/advanced) to upload the hpi file. You have to restart Jenkins in order to find the plugin in the installed plugins list.
 
 
-Plugin releases
----------------
+### Plugin releases
 
 	mvn release:prepare release:perform
 
 
-Authors
-=======
+## Authors
 
 Victor Martinez
 
 
-License
-=======
+## License
 
     The MIT License
 
