@@ -1,4 +1,4 @@
-package org.jenkinsci.plugins.disablejobsscheduler;
+package org.jenkinsci.plugins.maintenancejobsscheduler;
 
 import antlr.ANTLRException;
 import hudson.Extension;
