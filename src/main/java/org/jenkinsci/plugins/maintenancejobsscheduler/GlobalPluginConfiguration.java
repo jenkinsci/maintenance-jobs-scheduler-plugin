@@ -33,7 +33,7 @@ public final class GlobalPluginConfiguration extends GlobalConfiguration {
 
     private static final String PLUGIN_NAME = Messages.PluginName();
 
-    private boolean enableDisabler = false;
+    private boolean enable = false;
     private String filter;
     private String spec;
     private String excludedJobs;
@@ -42,15 +42,14 @@ public final class GlobalPluginConfiguration extends GlobalConfiguration {
     /**
      * Creates GlobalPluginConfiguration instance with specified parameters.
      *
-     * @param enableDisabler
+     * @param enable
      *            if this feature is enabled.
      * @param spec
      *            the crontab specification
      */
     @DataBoundConstructor
-    public GlobalPluginConfiguration(boolean enableDisabler, String spec) {
-
-        this.enableDisabler = enableDisabler;
+    public GlobalPluginConfiguration(boolean enable, String spec) {
+        this.enable = enable;
         this.spec = spec;
     }
 
@@ -69,7 +68,6 @@ public final class GlobalPluginConfiguration extends GlobalConfiguration {
     @Override
     public boolean configure(StaplerRequest req, JSONObject json) throws hudson.model.Descriptor.FormException {
         req.bindJSON(this, json);
-
         save();
         return true;
     }
@@ -79,17 +77,17 @@ public final class GlobalPluginConfiguration extends GlobalConfiguration {
      *
      * @return true if this plugin is enabled.
      */
-    public boolean isEnableDisabler() {
-        return enableDisabler;
+    public boolean isEnable() {
+        return enable;
     }
 
     /**
      * Sets flag whether this plugin is enabled or not.
      *
-     * @param enableDisabler true if this plugin is enabled.
+     * @param enable true if this plugin is enabled.
      */
-    public void setEnableDisabler(boolean enableDisabler) {
-        this.enableDisabler = enableDisabler;
+    public void setEnable(boolean enable) {
+        this.enable = enable;
     }
 
     /**
@@ -214,7 +212,7 @@ public final class GlobalPluginConfiguration extends GlobalConfiguration {
 
     public String toString() {
         return " spec - " + (spec !=null ? spec : "nothing") +
-               " enableDisabler - " + enableDisabler;
+               " enable - " + enable;
     }
 
     public String getDescription() {

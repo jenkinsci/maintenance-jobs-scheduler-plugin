@@ -34,7 +34,7 @@ public class MaintenanceJobsPeriodicWork extends AsyncAperiodicWork {
     @Override
     protected void execute(TaskListener taskListener) throws IOException, InterruptedException {
         GlobalPluginConfiguration conf = GlobalPluginConfiguration.get();
-        if (conf.isEnableDisabler()) {
+        if (conf.isEnable()) {
             Date today = new Date();
             for (Object item : Jenkins.getInstance().getItems()) {
                 if (item instanceof AbstractProject) {
