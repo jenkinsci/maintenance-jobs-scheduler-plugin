@@ -14,7 +14,7 @@
   <version>0.1-SNAPSHOT</version>
   <packaging>hpi</packaging>
 
-  <name>maintenance Jobs Scheduler Plugin</name>
+  <name>Maintenance Jobs Scheduler Plugin</name>
   <description>TODO</description>
   <url>https://wiki.jenkins-ci.org/display/JENKINS/Maintenance+Jobs+Scheduler+Plugin</url>
   <licenses>

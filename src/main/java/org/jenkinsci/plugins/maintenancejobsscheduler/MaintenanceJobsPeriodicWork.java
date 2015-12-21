@@ -94,7 +94,7 @@ public class MaintenanceJobsPeriodicWork extends AsyncAperiodicWork {
         return super.cancel();
     }
 
-    public CronTab getCronTab() throws ANTLRException {
+    public CronTab getCronTab() throws ANTLRException, NullPointerException {
         GlobalPluginConfiguration conf = GlobalPluginConfiguration.get();
         String cron = conf.getSpec();
         CronTab tab = new CronTab(cron);
