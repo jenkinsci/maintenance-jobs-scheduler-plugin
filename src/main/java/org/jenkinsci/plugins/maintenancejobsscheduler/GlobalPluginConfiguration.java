@@ -37,7 +37,7 @@ public final class GlobalPluginConfiguration extends GlobalConfiguration {
     private String filter;
     private String spec;
     private String excludedJobs;
-    private String description = "This job has been disabled automatically via the DisableJobsPeriodicWork";
+    private String description = "This job has been disabled automatically via the MaintenanceJobsPeriodicWork";
 
     /**
      * Creates GlobalPluginConfiguration instance with specified parameters.

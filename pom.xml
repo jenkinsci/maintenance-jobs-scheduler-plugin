@@ -15,7 +15,7 @@
   <packaging>hpi</packaging>
 
   <name>Maintenance Jobs Scheduler Plugin</name>
-  <description>TODO</description>
+  <description>Perform some deleting or disabling of old jobs based on some cron task.</description>
   <url>https://wiki.jenkins-ci.org/display/JENKINS/Maintenance+Jobs+Scheduler+Plugin</url>
   <licenses>
     <license>
