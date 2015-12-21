@@ -17,6 +17,10 @@ import java.util.GregorianCalendar;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.logging.Level;
 
+/**
+ *
+ * @author Victor Martinez
+ */
 @Extension
 public class DisableJobsPeriodicWork extends AsyncAperiodicWork {
 
