@@ -16,7 +16,7 @@
             <f:entry title="${%Excluding jobs}" field="excludedJobs">
                 <f:textarea />
             </f:entry>
-            <f:entry title="${%Remove Jobs}" field="enableRemover">
+            <f:entry title="${%Remove jobs}" field="removeJobs">
                 <f:checkbox />
             </f:entry>
         </f:advanced>

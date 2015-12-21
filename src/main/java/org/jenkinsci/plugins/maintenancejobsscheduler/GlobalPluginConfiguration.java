@@ -34,6 +34,7 @@ public final class GlobalPluginConfiguration extends GlobalConfiguration {
     private static final String PLUGIN_NAME = Messages.PluginName();
 
     private boolean enable = false;
+    private boolean removeJobs = false;
     private String filter;
     private String spec;
     private String excludedJobs;
@@ -102,8 +103,7 @@ public final class GlobalPluginConfiguration extends GlobalConfiguration {
     public void setSpec(String spec) {
         this.spec = spec;
     }
-
-
+    
     public String getExcludedJobs() {
         return excludedJobs;
     }
@@ -118,6 +118,23 @@ public final class GlobalPluginConfiguration extends GlobalConfiguration {
 
     public void setFilter(String filter) {
         this.filter = filter;
+    }
+
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public boolean isRemoveJobs() {
+        return removeJobs;
+    }
+
+    public void setRemoveJobs(boolean removeJobs) {
+        this.removeJobs = removeJobs;
     }
 
     /**
@@ -210,16 +227,18 @@ public final class GlobalPluginConfiguration extends GlobalConfiguration {
         return FormValidation.ok();
     }
 
+    /**
+     * Check the Integer expression entered by the user
+     *
+     */
+    public FormValidation doCheckRemoveJobs(@QueryParameter boolean value) {
+        if (value)
+            return FormValidation.warning("You will remove some jobs!!");
+        return FormValidation.ok();
+    }
+
     public String toString() {
         return " spec - " + (spec !=null ? spec : "nothing") +
                " enable - " + enable;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 }
