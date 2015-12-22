@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<org.jenkinsci.plugins.org.jenkinsci.plugins.maintenancejobsscheduler.GlobalPluginConfiguration plugin="maintenance-jobs-scheduler@0.1-SNAPSHOT">
+  <enable>true</enable>
+  <removeJobs>true</removeJobs>
+  <filter>1</filter>
+  <spec>@yearly</spec>
+  <excludedJobs>.*-deploy</excludedJobs>
+  <description>This job has been disabled automatically via the DisableJobsPeriodicWork</description>
+</org.jenkinsci.plugins.org.jenkinsci.plugins.maintenancejobsscheduler.GlobalPluginConfiguration>
