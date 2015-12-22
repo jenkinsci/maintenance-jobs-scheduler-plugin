@@ -11,7 +11,7 @@ import org.jvnet.hudson.test.JenkinsRule;
 import static org.junit.Assert.assertNotNull;
 
 /**
- * A Test for Plugin on Jenkins.
+ * A MaintenanceJobsPeriodicWorkThreadTest for Plugin on Jenkins.
  *
  * @author Victor Martinez
  */
