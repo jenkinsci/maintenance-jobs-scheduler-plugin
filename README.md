@@ -6,6 +6,24 @@ Perform some deleting or disabling of old jobs based on some cron tasks. You can
 
 When I started to use Jenkins, I was maintaining some Jenkins jobs manually, it was a tedious task then I coded some groovy script in order to automate it as much as I could, then I realized some organizations don't grant access to the groovy script api for some security concerns and therefore I wrote this plugin to help them and use it as a plugin, so the FOSS community can improve it if they need.
 
+```groovy
+import jenkins.model.Jenkins
+int days = 365
+
+// It will disable jobs older than X days
+long purgeTime = System.currentTimeMillis() - (days * 24 * 60 * 60 * 1000);
+
+def today = new Date()
+def message =  "<i>This job has been disabled automatically " + today + "</i>\n"
+Jenkins.instance?.items.findAll{ it.getLastBuild() != null &&
+                                 !it.isDisabled() &&
+                                 !it.getDescription().contains("This job has been disabled automatically") &&
+                                 it.getLastBuild().getTimeInMillis() < purgeTime}.each { job->
+    println(job.name)
+    job.disable()
+    job.setDescription(message + job.getDescription())
+}
+```
 
 ## Usage
 
