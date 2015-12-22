@@ -103,7 +103,7 @@ public final class GlobalPluginConfiguration extends GlobalConfiguration {
     public void setSpec(String spec) {
         this.spec = spec;
     }
-    
+
     public String getExcludedJobs() {
         return excludedJobs;
     }
