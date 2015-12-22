@@ -11,6 +11,8 @@ When I started to use Jenkins, I was maintaining some Jenkins jobs manually, it 
 
 ![Global Setup](images/global-setup.png)
 
+![Job status after running this plugin](images/disabled-job.png)
+
 ## Development
 
 Start the local Jenkins instance:
