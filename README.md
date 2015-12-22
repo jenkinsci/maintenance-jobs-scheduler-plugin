@@ -23,13 +23,25 @@ Jenkins.instance?.items.findAll{ it.getLastBuild() != null &&
     job.disable()
     job.setDescription(message + job.getDescription())
 }
-```
+``
 
 ## Usage
 
 ![Global Setup](images/global-setup.png)
 
 ![Job status after running this plugin](images/disabled-job.png)
+
+## Installation:
+* Install the plugin.
+* Go to ``Manage Jenkins`` -> ``Configure System`` -> ``Maintenance Jobs Scheduler`` section.
+* Enable the scheduler.
+* Set the scheduler.
+* Filter jobs which haven't been running for the last X days
+* Under Advanced, you can modify:
+  * The job description to be appended  (Plain text)
+  * The excluding jobs to don't apply this maintenance. (Java regexp)
+  * Enable the deletion of those jobs.
+* Save to preserve your changes.
 
 ## Development
 
