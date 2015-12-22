@@ -23,7 +23,7 @@ Jenkins.instance?.items.findAll{ it.getLastBuild() != null &&
     job.disable()
     job.setDescription(message + job.getDescription())
 }
-``
+```
 
 ## Usage
 
