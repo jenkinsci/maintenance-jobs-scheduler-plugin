@@ -4,7 +4,7 @@ Perform some deleting or disabling of old jobs based on some cron tasks. You can
 
 ## Motivation
 
-When I started to use Jenkins, I was maintaining some Jenkins jobs manually, it was a tedious task then I coded some groovy script in order to automate it as much as I could, then I realized some organizations don't grant access to the groovy script api for some security concerns and therefore I wrote this plugin to help them and use it as a plugin, so the FOSS community can improve it if they need.
+When I started to use Jenkins, I was maintaining some Jenkins jobs manually, it was a tedious task then I coded some groovy script in order to automate it as much as I could (as you can see in the above section), then I realized some organizations don't grant access to the groovy script api for some security concerns and therefore I wrote this plugin to help them and use it as a plugin, so the FOSS community can improve it if they need.
 
 ```groovy
 import jenkins.model.Jenkins
