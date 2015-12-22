@@ -34,12 +34,16 @@ public class MaintenanceJobsPeriodicWork extends AsyncAperiodicWork {
     @Override
     protected void execute(TaskListener taskListener) throws IOException, InterruptedException {
         GlobalPluginConfiguration conf = GlobalPluginConfiguration.get();
-        if (conf.isEnable()) {
+        execute(conf.isEnable(), Integer.parseInt(conf.getFilter()), conf.getDescription());
+    }
+
+    public void execute(boolean enable, int filter, String defaultDescription) throws IOException, InterruptedException {
+        if (enable) {
             Date today = new Date();
             for (Object item : Jenkins.getInstance().getItems()) {
                 if (item instanceof AbstractProject) {
                     AbstractProject project = (AbstractProject) item;
-                    long purgeTime = System.currentTimeMillis() - (Integer.parseInt(conf.getFilter()) * 24 * 60 * 60 * 1000);
+                    long purgeTime = System.currentTimeMillis() - (filter * 24 * 60 * 60 * 1000);
                     if (project.getLastBuild() == null) {
                         logger.log(Level.FINER, "Excluded that job '" + project.getName() + "' since it doesn't have any builds yet");
                     } else if (project.isDisabled()) {
@@ -47,7 +51,7 @@ public class MaintenanceJobsPeriodicWork extends AsyncAperiodicWork {
                     } else if (project.getLastBuild().getTimeInMillis() < purgeTime) {
                         logger.log(Level.FINER, "Disabling job '" + project.getName() + "'");
                         project.disable();
-                        String description = conf.getDescription() + " '" + today.toString() + "'\n";
+                        String description =  defaultDescription + " '" + today.toString() + "'\n";
                         //TODO: add dependency with https://wiki.jenkins-ci.org/display/JENKINS/OWASP+Markup+Formatter+Plugin
                         // in order to add description in html format
                         // if (Jenkins.getInstance().getMarkupFormatter() instanceof hudson.markup.RawHtmlMarkupFormatter)
