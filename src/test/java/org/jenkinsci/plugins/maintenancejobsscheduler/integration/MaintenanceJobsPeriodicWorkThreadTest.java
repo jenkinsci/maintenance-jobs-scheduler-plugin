@@ -13,9 +13,7 @@ import org.jvnet.hudson.test.recipes.LocalData;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 /**
  * @author victor.martinez.
@@ -139,6 +137,17 @@ public class MaintenanceJobsPeriodicWorkThreadTest {
 
         MaintenanceJobsPeriodicWork work = new MaintenanceJobsPeriodicWork();
         work.execute(true, 365, "disabled", ".*1$", false);
+        waitUntilThreadEnds(work);
+        assertEquals("description", project1.getDescription());
+        assertEquals("description", project2.getDescription());
+
+        work.execute(true, 365, "disabled", "doesn't exist regex", false);
+        waitUntilThreadEnds(work);
+        assertNotEquals("description", project1.getDescription());
+        assertEquals("description", project2.getDescription());
+
+        project1.setDescription("description");
+        work.execute(true, 365, "disabled", "+*wrongregexp(])", false);
         waitUntilThreadEnds(work);
         assertEquals("description", project1.getDescription());
         assertEquals("description", project2.getDescription());

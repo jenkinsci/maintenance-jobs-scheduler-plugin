@@ -9,13 +9,18 @@ import hudson.model.TaskListener;
 import hudson.scheduler.CronTab;
 import jenkins.model.Jenkins;
 import jenkins.util.Timer;
+import org.apache.commons.lang.StringUtils;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.logging.Level;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 /**
  *
@@ -40,6 +45,12 @@ public class MaintenanceJobsPeriodicWork extends AsyncAperiodicWork {
     public void execute(boolean enable, int filter, String defaultDescription, String excludedJobs, boolean removeJobs) throws IOException, InterruptedException {
         if (enable) {
             Date today = new Date();
+
+            List<String> listJobs = null;
+            if(StringUtils.isNotBlank(excludedJobs)) {
+                listJobs = Arrays.asList(excludedJobs.split("\n"));
+            }
+
             for (Object item : Jenkins.getInstance().getItems()) {
                 if (item instanceof AbstractProject) {
                     AbstractProject project = (AbstractProject) item;
@@ -49,17 +60,36 @@ public class MaintenanceJobsPeriodicWork extends AsyncAperiodicWork {
                     } else if (project.isDisabled()) {
                         logger.log(Level.FINER, "Excluded that job '" + project.getName() + "' since it doesn't have any builds yet");
                     } else if (project.getLastBuild().getTimeInMillis() < purgeTime) {
-                        if (removeJobs) {
-                            logger.log(Level.FINER, "Removing job '" + project.getName() + "'");
-                            project.delete();
+                        boolean found = true;
+                        if (listJobs != null) {
+                            for (String excluded : listJobs) {
+                                try {
+                                    Pattern search = Pattern.compile(excluded);
+                                    if (search.matcher(project.getName()).matches()) {
+                                        found = false;
+                                    }
+                                } catch(PatternSyntaxException pse) {
+                                    logger.log(Level.WARNING, "It does nothing since Invalid regular expression [" + excluded +
+                                                "] exception: " + pse.getDescription());
+                                    found = false;
+                                }
+                            }
+                        }
+                        if (found) {
+                            if (removeJobs) {
+                                logger.log(Level.FINER, "Removing job '" + project.getName() + "'");
+                                project.delete();
+                            } else {
+                                logger.log(Level.FINER, "Disabling job '" + project.getName() + "'");
+                                project.disable();
+                                String description = defaultDescription + " '" + today.toString() + "'\n";
+                                //TODO: add dependency with https://wiki.jenkins-ci.org/display/JENKINS/OWASP+Markup+Formatter+Plugin
+                                // in order to add description in html format
+                                // if (Jenkins.getInstance().getMarkupFormatter() instanceof hudson.markup.RawHtmlMarkupFormatter)
+                                project.setDescription(description + project.getDescription());
+                            }
                         } else {
-                            logger.log(Level.FINER, "Disabling job '" + project.getName() + "'");
-                            project.disable();
-                            String description = defaultDescription + " '" + today.toString() + "'\n";
-                            //TODO: add dependency with https://wiki.jenkins-ci.org/display/JENKINS/OWASP+Markup+Formatter+Plugin
-                            // in order to add description in html format
-                            // if (Jenkins.getInstance().getMarkupFormatter() instanceof hudson.markup.RawHtmlMarkupFormatter)
-                            project.setDescription(description + project.getDescription());
+                            logger.log(Level.FINER, "Excluded that job '" + project.getName() + "' since it matches the excluded regex!");
                         }
                     } else {
                         logger.log(Level.FINER, "Excluded that job '" + project.getName() + "' for some other reason");
