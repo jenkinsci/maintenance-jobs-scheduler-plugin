@@ -49,13 +49,18 @@ public class MaintenanceJobsPeriodicWork extends AsyncAperiodicWork {
                     } else if (project.isDisabled()) {
                         logger.log(Level.FINER, "Excluded that job '" + project.getName() + "' since it doesn't have any builds yet");
                     } else if (project.getLastBuild().getTimeInMillis() < purgeTime) {
-                        logger.log(Level.FINER, "Disabling job '" + project.getName() + "'");
-                        project.disable();
-                        String description =  defaultDescription + " '" + today.toString() + "'\n";
-                        //TODO: add dependency with https://wiki.jenkins-ci.org/display/JENKINS/OWASP+Markup+Formatter+Plugin
-                        // in order to add description in html format
-                        // if (Jenkins.getInstance().getMarkupFormatter() instanceof hudson.markup.RawHtmlMarkupFormatter)
-                        project.setDescription(description + project.getDescription());
+                        if (removeJobs) {
+                            logger.log(Level.FINER, "Removing job '" + project.getName() + "'");
+                            project.delete();
+                        } else {
+                            logger.log(Level.FINER, "Disabling job '" + project.getName() + "'");
+                            project.disable();
+                            String description = defaultDescription + " '" + today.toString() + "'\n";
+                            //TODO: add dependency with https://wiki.jenkins-ci.org/display/JENKINS/OWASP+Markup+Formatter+Plugin
+                            // in order to add description in html format
+                            // if (Jenkins.getInstance().getMarkupFormatter() instanceof hudson.markup.RawHtmlMarkupFormatter)
+                            project.setDescription(description + project.getDescription());
+                        }
                     } else {
                         logger.log(Level.FINER, "Excluded that job '" + project.getName() + "' for some other reason");
                     }

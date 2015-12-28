@@ -15,6 +15,7 @@ import java.util.concurrent.ExecutionException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * @author victor.martinez.
@@ -96,6 +97,27 @@ public class MaintenanceJobsPeriodicWorkThreadTest {
         project1.setDescription("description");
         waitUntilThreadEnds(work);
         assertEquals("description", project1.getDescription());
+        assertEquals("description", project2.getDescription());
+    }
+
+    @LocalData
+    @Test
+    public void testWithOldJobsAndRemoveOption() throws IOException, InterruptedException, ExecutionException {
+        FreeStyleProject project2 = j.jenkins.getItemByFullName("project2", FreeStyleProject.class);
+
+        project2.setDescription("description");
+
+        // Run build and wait for it to finish
+        project2.scheduleBuild2(0);
+        QueueTaskFuture<FreeStyleBuild> f = project2.scheduleBuild2(0);
+        f.waitForStart();
+        f.get();
+
+        MaintenanceJobsPeriodicWork work = new MaintenanceJobsPeriodicWork();
+        work.execute(true, 365, "disabled", "", true);
+        waitUntilThreadEnds(work);
+        FreeStyleProject project1 = j.jenkins.getItemByFullName("project1", FreeStyleProject.class);
+        assertNull(project1);
         assertEquals("description", project2.getDescription());
     }
 }
