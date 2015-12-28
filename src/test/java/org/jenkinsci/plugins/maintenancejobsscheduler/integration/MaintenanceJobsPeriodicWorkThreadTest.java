@@ -48,7 +48,7 @@ public class MaintenanceJobsPeriodicWorkThreadTest {
         project2.setDescription("description");
 
         MaintenanceJobsPeriodicWork work = new MaintenanceJobsPeriodicWork();
-        work.execute(true, 1, "disabled");
+        work.execute(true, 1, "disabled", "", false);
         waitUntilThreadEnds(work);
         assertEquals("description", project1.getDescription());
         assertEquals("description", project2.getDescription());
@@ -65,7 +65,7 @@ public class MaintenanceJobsPeriodicWorkThreadTest {
         project2.setDescription("description");
         project2.disable();
         MaintenanceJobsPeriodicWork work = new MaintenanceJobsPeriodicWork();
-        work.execute(true, 1, "disabled");
+        work.execute(true, 1, "disabled", "", false);
         waitUntilThreadEnds(work);
         assertEquals("description", project1.getDescription());
         assertEquals("description", project2.getDescription());
@@ -87,12 +87,12 @@ public class MaintenanceJobsPeriodicWorkThreadTest {
         f.get();
 
         MaintenanceJobsPeriodicWork work = new MaintenanceJobsPeriodicWork();
-        work.execute(true, 365, "disabled");
+        work.execute(true, 365, "disabled", "", false);
         waitUntilThreadEnds(work);
         assertNotEquals("description", project1.getDescription());
         assertEquals("description", project2.getDescription());
 
-        work.execute(false, 365, "disabled");
+        work.execute(false, 365, "disabled", "", false);
         project1.setDescription("description");
         waitUntilThreadEnds(work);
         assertEquals("description", project1.getDescription());

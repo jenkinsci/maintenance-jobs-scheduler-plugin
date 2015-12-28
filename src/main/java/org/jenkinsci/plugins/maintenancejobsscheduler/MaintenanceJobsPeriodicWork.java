@@ -34,10 +34,10 @@ public class MaintenanceJobsPeriodicWork extends AsyncAperiodicWork {
     @Override
     protected void execute(TaskListener taskListener) throws IOException, InterruptedException {
         GlobalPluginConfiguration conf = GlobalPluginConfiguration.get();
-        execute(conf.isEnable(), Integer.parseInt(conf.getFilter()), conf.getDescription());
+        execute(conf.isEnable(), Integer.parseInt(conf.getFilter()), conf.getDescription(), conf.getExcludedJobs(), conf.isRemoveJobs());
     }
 
-    public void execute(boolean enable, int filter, String defaultDescription) throws IOException, InterruptedException {
+    public void execute(boolean enable, int filter, String defaultDescription, String excludedJobs, boolean removeJobs) throws IOException, InterruptedException {
         if (enable) {
             Date today = new Date();
             for (Object item : Jenkins.getInstance().getItems()) {
