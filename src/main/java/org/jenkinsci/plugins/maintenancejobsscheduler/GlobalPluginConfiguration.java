@@ -195,8 +195,8 @@ public final class GlobalPluginConfiguration extends GlobalConfiguration {
                     for (TopLevelItem item : Jenkins.getInstance().getItems()) {
                         if (search.matcher(item.getName()).matches()) {
                             found = true;
+                            numberOfProjects++;
                         }
-                        numberOfProjects++;
                     }
                 } catch (PatternSyntaxException pse) {
                     return FormValidation.error("Invalid regular expression [" +
