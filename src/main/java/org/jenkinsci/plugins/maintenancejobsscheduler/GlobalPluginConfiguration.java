@@ -188,6 +188,7 @@ public final class GlobalPluginConfiguration extends GlobalConfiguration {
         }
         if (listJobs!=null) {
             boolean found = false;
+            int numberOfProjects = 0;
             for (String excluded : listJobs) {
                 try {
                     Pattern search = Pattern.compile(excluded);
@@ -195,6 +196,7 @@ public final class GlobalPluginConfiguration extends GlobalConfiguration {
                         if (search.matcher(item.getName()).matches()) {
                             found = true;
                         }
+                        numberOfProjects++;
                     }
                 } catch (PatternSyntaxException pse) {
                     return FormValidation.error("Invalid regular expression [" +
@@ -203,9 +205,9 @@ public final class GlobalPluginConfiguration extends GlobalConfiguration {
                 }
             }
             if (!found) {
-                return FormValidation.warning("No jobs with the above regex");
+                return FormValidation.warning(Messages.no_jobs());
             } else {
-                return FormValidation.ok();
+                return FormValidation.ok(Messages.there_are_jobs(numberOfProjects));
             }
         }else{
             return FormValidation.ok();
@@ -232,7 +234,7 @@ public final class GlobalPluginConfiguration extends GlobalConfiguration {
      */
     public FormValidation doCheckRemoveJobs(@QueryParameter boolean value) {
         if (value)
-            return FormValidation.warning("You will remove some jobs!!");
+            return FormValidation.warning(Messages.warning_removing_jobs());
         return FormValidation.ok();
     }
 
