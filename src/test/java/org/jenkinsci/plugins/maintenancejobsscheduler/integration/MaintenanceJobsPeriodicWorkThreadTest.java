@@ -57,8 +57,8 @@ public class MaintenanceJobsPeriodicWorkThreadTest {
     @LocalData
     @Test
     public void testWithDisableJobs() throws IOException, InterruptedException, ExecutionException {
-        FreeStyleProject project1 = (FreeStyleProject) j.jenkins.getItemByFullName("project1", FreeStyleProject.class);
-        FreeStyleProject project2 = (FreeStyleProject) j.jenkins.getItemByFullName("project2", FreeStyleProject.class);
+        FreeStyleProject project1 = j.jenkins.getItemByFullName("project1", FreeStyleProject.class);
+        FreeStyleProject project2 = j.jenkins.getItemByFullName("project2", FreeStyleProject.class);
 
         project1.setDescription("description");
         project1.disable();
