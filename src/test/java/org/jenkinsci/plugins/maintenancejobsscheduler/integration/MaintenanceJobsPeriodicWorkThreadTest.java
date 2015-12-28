@@ -93,8 +93,9 @@ public class MaintenanceJobsPeriodicWorkThreadTest {
         assertNotEquals("description", project1.getDescription());
         assertEquals("description", project2.getDescription());
 
-        work.execute(false, 365, "disabled", "", false);
+        project1 = j.jenkins.getItemByFullName("project1", FreeStyleProject.class);
         project1.setDescription("description");
+        work.execute(false, 365, "disabled", "", false);
         waitUntilThreadEnds(work);
         assertEquals("description", project1.getDescription());
         assertEquals("description", project2.getDescription());
@@ -118,6 +119,28 @@ public class MaintenanceJobsPeriodicWorkThreadTest {
         waitUntilThreadEnds(work);
         FreeStyleProject project1 = j.jenkins.getItemByFullName("project1", FreeStyleProject.class);
         assertNull(project1);
+        assertEquals("description", project2.getDescription());
+    }
+
+    @LocalData
+    @Test
+    public void testWithOldJobsAndExcludedOption() throws IOException, InterruptedException, ExecutionException {
+        FreeStyleProject project1 = j.jenkins.getItemByFullName("project1", FreeStyleProject.class);
+        FreeStyleProject project2 = j.jenkins.getItemByFullName("project2", FreeStyleProject.class);
+
+        project1.setDescription("description");
+        project2.setDescription("description");
+
+        // Run build and wait for it to finish
+        project2.scheduleBuild2(0);
+        QueueTaskFuture<FreeStyleBuild> f = project2.scheduleBuild2(0);
+        f.waitForStart();
+        f.get();
+
+        MaintenanceJobsPeriodicWork work = new MaintenanceJobsPeriodicWork();
+        work.execute(true, 365, "disabled", ".*1$", false);
+        waitUntilThreadEnds(work);
+        assertEquals("description", project1.getDescription());
         assertEquals("description", project2.getDescription());
     }
 }
