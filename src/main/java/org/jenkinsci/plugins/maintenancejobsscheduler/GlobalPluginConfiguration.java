@@ -36,22 +36,22 @@ public final class GlobalPluginConfiguration extends GlobalConfiguration {
     private boolean enable = false;
     private boolean removeJobs = false;
     private String filter;
-    private String spec;
+    private String disabledSpec;
     private String excludedJobs;
-    private String description = "This job has been disabled automatically via the MaintenanceJobsPeriodicWork";
+    private String description = Messages.Description();
 
     /**
      * Creates GlobalPluginConfiguration instance with specified parameters.
      *
      * @param enable
      *            if this feature is enabled.
-     * @param spec
+     * @param disabledSpec
      *            the crontab specification
      */
     @DataBoundConstructor
-    public GlobalPluginConfiguration(boolean enable, String spec) {
+    public GlobalPluginConfiguration(boolean enable, String disabledSpec) {
         this.enable = enable;
-        this.spec = spec;
+        this.disabledSpec = disabledSpec;
     }
 
     /**
@@ -96,12 +96,12 @@ public final class GlobalPluginConfiguration extends GlobalConfiguration {
      *
      * If you are not using cron service, just ignore it.
      */
-    public final String getSpec() {
-        return spec;
+    public final String getDisabledSpec() {
+        return disabledSpec;
     }
 
-    public void setSpec(String spec) {
-        this.spec = spec;
+    public void setDisabledSpec(String disabledSpec) {
+        this.disabledSpec = disabledSpec;
     }
 
     public String getExcludedJobs() {
@@ -119,7 +119,6 @@ public final class GlobalPluginConfiguration extends GlobalConfiguration {
     public void setFilter(String filter) {
         this.filter = filter;
     }
-
 
     public String getDescription() {
         return description;
@@ -149,7 +148,7 @@ public final class GlobalPluginConfiguration extends GlobalConfiguration {
     /**
      * Performs syntax check.
      */
-    public FormValidation doCheckSpec(@QueryParameter String value) {
+    public FormValidation doCheckDisabledSpec(@QueryParameter String value) {
         try {
             CronTabList ctl = CronTabList.create((value));
             Collection<FormValidation> validations = new ArrayList<FormValidation>();
@@ -238,7 +237,7 @@ public final class GlobalPluginConfiguration extends GlobalConfiguration {
     }
 
     public String toString() {
-        return " spec - " + (spec !=null ? spec : "nothing") +
+        return " disabledSpec - " + (disabledSpec !=null ? disabledSpec : "nothing") +
                " enable - " + enable;
     }
 }

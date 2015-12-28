@@ -3,7 +3,7 @@
   <enable>true</enable>
   <removeJobs>true</removeJobs>
   <filter>1</filter>
-  <spec>@yearly</spec>
+  <disabledSpec>@yearly</disabledSpec>
   <excludedJobs>.*-deploy</excludedJobs>
   <description>This job has been disabled automatically via the DisableJobsPeriodicWork</description>
 </org.jenkinsci.plugins.org.jenkinsci.plugins.maintenancejobsscheduler.GlobalPluginConfiguration>
