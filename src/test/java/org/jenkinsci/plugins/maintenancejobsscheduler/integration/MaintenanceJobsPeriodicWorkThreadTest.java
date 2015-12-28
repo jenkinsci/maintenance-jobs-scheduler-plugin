@@ -1,7 +1,9 @@
 package org.jenkinsci.plugins.maintenancejobsscheduler.integration;
 
+import hudson.model.FreeStyleBuild;
 import hudson.model.FreeStyleProject;
 import hudson.model.Result;
+import hudson.model.queue.QueueTaskFuture;
 import org.jenkinsci.plugins.maintenancejobsscheduler.MaintenanceJobsPeriodicWork;
 import org.junit.Rule;
 import org.junit.Test;
@@ -72,11 +74,18 @@ public class MaintenanceJobsPeriodicWorkThreadTest {
     @LocalData
     @Test
     public void testWithOldJobs() throws IOException, InterruptedException, ExecutionException {
-        FreeStyleProject project1 = (FreeStyleProject) j.jenkins.getItemByFullName("project1", FreeStyleProject.class);
-        FreeStyleProject project2 = (FreeStyleProject) j.jenkins.getItemByFullName("project2", FreeStyleProject.class);
+        FreeStyleProject project1 = j.jenkins.getItemByFullName("project1", FreeStyleProject.class);
+        FreeStyleProject project2 = j.jenkins.getItemByFullName("project2", FreeStyleProject.class);
 
         project1.setDescription("description");
         project2.setDescription("description");
+
+        // Run build and wait for it to finish
+        project2.scheduleBuild2(0);
+        QueueTaskFuture<FreeStyleBuild> f = project2.scheduleBuild2(0);
+        f.waitForStart();
+        f.get();
+
         MaintenanceJobsPeriodicWork work = new MaintenanceJobsPeriodicWork();
         work.execute(true, 365, "disabled");
         waitUntilThreadEnds(work);
