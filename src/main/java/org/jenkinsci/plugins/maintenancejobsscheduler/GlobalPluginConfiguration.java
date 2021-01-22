@@ -2,6 +2,7 @@ package org.jenkinsci.plugins.maintenancejobsscheduler;
 
 import antlr.ANTLRException;
 import hudson.Extension;
+import static hudson.Util.fixNull;
 import hudson.model.TopLevelItem;
 import hudson.scheduler.CronTabList;
 import hudson.util.FormValidation;
@@ -14,10 +15,8 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -150,10 +149,9 @@ public final class GlobalPluginConfiguration extends GlobalConfiguration {
      */
     public FormValidation doCheckDisabledSpec(@QueryParameter String value) {
         try {
-            CronTabList ctl = CronTabList.create((value));
+            CronTabList ctl = CronTabList.create(fixNull(value));
             Collection<FormValidation> validations = new ArrayList<FormValidation>();
             updateValidationsForSanity(validations, ctl);
-            updateValidationsForNextRun(validations, ctl);
             return FormValidation.aggregate(validations);
         } catch (ANTLRException e) {
             if (value.trim().indexOf('\n')==-1 && value.contains("**"))
@@ -165,17 +163,6 @@ public final class GlobalPluginConfiguration extends GlobalConfiguration {
     private void updateValidationsForSanity(Collection<FormValidation> validations, CronTabList ctl) {
         String msg = ctl.checkSanity();
         if(msg!=null)  validations.add(FormValidation.warning(msg));
-    }
-
-    private void updateValidationsForNextRun(Collection<FormValidation> validations, CronTabList ctl) {
-        Calendar prev = ctl.previous();
-        Calendar next = ctl.next();
-        if (prev != null && next != null) {
-            DateFormat fmt = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL);
-            validations.add(FormValidation.ok(Messages.would_last_have_run_at_would_next_run_at(fmt.format(prev.getTime()), fmt.format(next.getTime()))));
-        } else {
-            validations.add(FormValidation.warning(Messages.no_schedules_so_will_never_run()));
-        }
     }
 
     /**

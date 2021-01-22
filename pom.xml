@@ -5,14 +5,17 @@
   <parent>
     <groupId>org.jenkins-ci.plugins</groupId>
     <artifactId>plugin</artifactId>
-    <version>1.590</version>
+    <version>3.1</version>
     <relativePath />
   </parent>
   <groupId>org.jenkins-ci.plugins</groupId>
   <artifactId>maintenance-jobs-scheduler</artifactId>
   <version>0.2.0-SNAPSHOT</version>
   <packaging>hpi</packaging>
-
+  <properties>
+    <java.level>8</java.level>
+    <jenkins.version>2.138.4</jenkins.version>
+  </properties>
   <name>Maintenance Jobs Scheduler Plugin</name>
   <description>Perform some deleting or disabling of old jobs based on some cron task.</description>
   <url>https://wiki.jenkins-ci.org/display/JENKINS/Maintenance+Jobs+Scheduler+Plugin</url>
